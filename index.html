@@ -219,22 +219,9 @@
     <p class="q"><span class="num">N</span>质保政策</p>
     <div class="warn">
       <span class="ban">账号仅限个人使用⚠ 禁止反代，逆向，镜像，共享， 100% 封号，不质保！！！</span>
-
-      <div class="sub">Claude Max 质保规则</div>
-      <div class="rule">（1）<b>Claude Max 20x</b> 封号：扣 20% 手续费 + 按天收费（50 元/天）
-        <div class="eg">举例：客户实付 1450 元，使用 10 天后封号，收取手续费 1450×20% + 50×10 = 790 元，剩余 1450−790 = 660 元原路退回。</div>
-      </div>
-      <div class="rule">（2）<b>Claude Max 5x</b> 封号：扣 20% 手续费 + 按天收费（30 元/天）
-        <div class="eg">举例：客户实付 820 元，使用 10 天后封号，收取手续费 820×20% + 30×10 = 464 元，剩余 820−464 = 356 元原路退回。</div>
-      </div>
-      <div class="rule">（3）只掉订阅不收手续费，直接按 50 或 30 元/天收费（一般不会出现）。
-        <div class="eg">举例：使用 10 天后会员没了、账号正常，收取 50×10 = 500 元或 30×10 = 300 元，剩余原路退回。</div>
-      </div>
-
-      <div class="sub">Claude Pro 质保规则</div>
-      <div class="rule">封号：扣 20% 手续费 + 按天收费（<b>5.5 元/天</b>），剩余款项原支付方式退回。</div>
+      <div id="warrantyBody"></div>
     </div>
-    <div class="benefit">★ 专享优惠：凡购买本店【网络环境安全技术支持服务】的客户，封号退款时<u>免除上述 20% 手续费</u>，仅按天收费。</div>
+    <div class="benefit" id="warrantyNote"></div>
     <label class="agree"><input type="checkbox" id="agree">我已阅读并同意以上质保政策</label>
   </div>
 
@@ -293,7 +280,56 @@ function showStep(i){
   document.getElementById('nextBtn').style.display = last ? 'none' : '';
   document.getElementById('genBtn').style.display = last ? '' : 'none';
   updateLive();
+  renderWarranty();
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// 是否已购买网络环境服务（专业网络环境视为不需要购买，按普通质保）
+function hasNetService(){
+  const network=document.querySelector('input[name="network"]:checked')?.value;
+  const netsvc=document.querySelector('input[name="netsvc"]:checked')?.value;
+  return network!=='专业网络环境' && netsvc==='需要';
+}
+
+// 根据是否购买网络服务，动态渲染质保规则
+function renderWarranty(){
+  const body=document.getElementById('warrantyBody');
+  const note=document.getElementById('warrantyNote');
+  if(!body) return;
+  const vip=hasNetService();
+  if(vip){
+    body.innerHTML=`
+      <div class="sub">Claude Max 质保规则（已购网络环境服务）</div>
+      <div class="rule">（1）<b>Claude Max 20x</b> 封号：<u>不收 20% 手续费</u>，仅按天收费（50 元/天）
+        <div class="eg">举例：客户实付 1450 元，使用 10 天后封号，仅收 50×10 = 500 元，剩余 1450−500 = 950 元原路退回。</div>
+      </div>
+      <div class="rule">（2）<b>Claude Max 5x</b> 封号：<u>不收 20% 手续费</u>，仅按天收费（30 元/天）
+        <div class="eg">举例：客户实付 820 元，使用 10 天后封号，仅收 30×10 = 300 元，剩余 820−300 = 520 元原路退回。</div>
+      </div>
+      <div class="rule">（3）只掉订阅不收手续费，直接按 50 或 30 元/天收费（一般不会出现）。
+        <div class="eg">举例：使用 10 天后会员没了、账号正常，收取 50×10 = 500 元或 30×10 = 300 元，剩余原路退回。</div>
+      </div>
+      <div class="sub">Claude Pro 质保规则（已购网络环境服务）</div>
+      <div class="rule">封号：<u>不收 20% 手续费</u>，仅按天收费（<b>5.5 元/天</b>），剩余款项原支付方式退回。</div>`;
+    note.style.display='';
+    note.innerHTML=`★ 您已购买【网络环境安全技术支持服务】，封号退款时<u>免除 20% 手续费</u>，仅按天收费。`;
+  }else{
+    body.innerHTML=`
+      <div class="sub">Claude Max 质保规则</div>
+      <div class="rule">（1）<b>Claude Max 20x</b> 封号：扣 20% 手续费 + 按天收费（50 元/天）
+        <div class="eg">举例：客户实付 1450 元，使用 10 天后封号，收取手续费 1450×20% + 50×10 = 790 元，剩余 1450−790 = 660 元原路退回。</div>
+      </div>
+      <div class="rule">（2）<b>Claude Max 5x</b> 封号：扣 20% 手续费 + 按天收费（30 元/天）
+        <div class="eg">举例：客户实付 820 元，使用 10 天后封号，收取手续费 820×20% + 30×10 = 464 元，剩余 820−464 = 356 元原路退回。</div>
+      </div>
+      <div class="rule">（3）只掉订阅不收手续费，直接按 50 或 30 元/天收费（一般不会出现）。
+        <div class="eg">举例：使用 10 天后会员没了、账号正常，收取 50×10 = 500 元或 30×10 = 300 元，剩余原路退回。</div>
+      </div>
+      <div class="sub">Claude Pro 质保规则</div>
+      <div class="rule">封号：扣 20% 手续费 + 按天收费（<b>5.5 元/天</b>），剩余款项原支付方式退回。</div>`;
+    note.style.display='';
+    note.innerHTML=`★ 专享优惠：凡购买本店【网络环境安全技术支持服务】的客户，封号退款时<u>免除上述 20% 手续费</u>，仅按天收费。`;
+  }
 }
 
 // 每一步必答校验
@@ -444,7 +480,7 @@ function generate(){
   txt+='————————————————\n';
   rows.forEach(([k,v])=>{ txt+=`${k}：${v}\n`; });
   if(d.plan){
-    const hasNetSvc = d.netsvc==='需要';
+    const hasNetSvc = hasNetService();
     txt+='————————————————\n';
     txt+=`【账号版本】${d.plan}\n`;
     txt+=`【质保政策】${planWarranty(d.plan, hasNetSvc)}\n`;
