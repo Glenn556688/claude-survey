@@ -187,7 +187,25 @@
     <div id="netsvcInfo" class="subq hidden">
       <p class="subq-q">网络环境安全技术支持服务说明</p>
       <div style="font-size:13px;line-height:1.7;color:var(--text);">
-        【此处内容待补充】
+        <b>这是什么？</b><br>
+        由我们的技术人员为您一对一搭建稳定、纯净的专属网络环境，让您安全、顺畅地使用 Claude。<br><br>
+        <b>为什么需要？</b><br>
+        Claude 对网络环境非常敏感。使用公共机场 / 大量人共用的 IP，容易因 IP 不纯净、人数过多、节点异常等导致<u>账号被封</u>。纯净的网络环境能大幅降低封号风险，是账号长期稳定的关键。<br><br>
+        <b>服务内容：</b><br>
+        · <b>2 人共享 IP 环境</b>，人数极少、纯净度高，远优于几十上百人共用的公共机场<br>
+        · 技术人员远程协助部署，全程一对一指导<br>
+        · 节点稳定，速度快、延迟低，使用更顺畅<br>
+        · 后续使用中的网络问题持续提供技术支持<br><br>
+        <b>优点：</b><br>
+        · <b>封号风险大幅降低</b>，账号更稳定、更长寿<br>
+        · IP 纯净独立，避免被他人连带牵连封号<br>
+        · 省心省事，无需自己折腾节点、配置<br>
+        · 搭配会员还有封号退款<u>免 20% 手续费</u>等专属福利<br><br>
+        <b>费用：</b><br>
+        · 服务费 <b>200 元</b>（一次性）<br>
+        · 流量费 <b>150 元 / 季度</b><br><br>
+        <b>专属福利：</b>开通会员并购买本服务，封号退款时<u>免收 20% 手续费</u>，仅按天计费；开通 <b>Max 20x</b> 还可<u>免除 200 元服务费</u>。<br><br>
+        如仍有疑问，可在下方选择「需要」并留下联系方式，技术人员会一对一为您解答。
       </div>
     </div>
   </div>
@@ -340,6 +358,13 @@ function validateStep(s){
   s.querySelectorAll('input[type=radio]').forEach(r=>radioGroups.add(r.name));
   for(const name of radioGroups){
     if(!s.querySelector(`input[name="${name}"]:checked`)){alert('请先选择一项再继续');return false;}
+  }
+  // 网络服务步：选「想先了解一下」后，必须再选「需要」或「暂不需要」才能继续
+  if(s.id==='netsvcStep'){
+    const netsvc=document.querySelector('input[name="netsvc"]:checked')?.value;
+    if(netsvc==='想先了解一下'){
+      alert('请阅读上方服务说明后，选择「需要」或「暂不需要」再继续');return false;
+    }
   }
   // 联系方式步：选了「需要部署」时必填
   if(s.id==='contactStep'){
