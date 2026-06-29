@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>封号退款计算器 · 颗粒AI王小旺</title>
+<style>
+  :root{
+    --brand:#C15F3C; --brand-dark:#A04E30;
+    --bg:#F7F3EE; --card:#fff; --line:#E7DFD4;
+    --text:#3A3330; --muted:#8A817A;
+    --ok:#2E7D52; --okbg:#EAF5EF;
+    --warn:#B5482C; --warnbg:#FBEEE9;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    padding:18px 12px;-webkit-text-size-adjust:100%;}
+  .wrap{max-width:480px;margin:0 auto;}
+  .head{background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+    color:#fff;border-radius:16px;padding:20px 22px;margin-bottom:16px;}
+  .head h1{margin:0;font-size:19px;}
+  .head p{margin:6px 0 0;font-size:12px;opacity:.9;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:18px 16px;margin-bottom:14px;}
+  label.lab{display:block;font-size:14px;font-weight:600;margin:0 0 8px;}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+  .opt{flex:1 1 calc(50% - 4px);border:1px solid var(--line);border-radius:10px;
+    padding:11px 10px;font-size:14px;cursor:pointer;text-align:center;
+    background:#fff;transition:.15s;}
+  .opt.checked{border-color:var(--brand);background:#FBF1EC;color:var(--brand-dark);font-weight:600;}
+  .opt input{display:none;}
+  .field{margin-top:14px;}
+  .field input{width:100%;border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;font-size:16px;color:var(--text);background:#fff;}
+  .field input:focus{outline:none;border-color:var(--brand);}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px;}
+  .perday{font-size:13px;color:var(--brand-dark);margin-top:8px;}
+  .results{display:none;}
+  .res{border-radius:14px;padding:16px;margin-bottom:12px;}
+  .res .rt{font-size:13px;font-weight:600;margin-bottom:8px;}
+  .res .big{font-size:26px;font-weight:700;}
+  .res .yuan{font-size:15px;font-weight:600;}
+  .res .detail{font-size:12px;line-height:1.7;margin-top:8px;opacity:.85;}
+  .res.fee{background:var(--warnbg);color:var(--warn);}
+  .res.nofee{background:var(--okbg);color:var(--ok);}
+  .btn{width:100%;border:none;border-radius:12px;padding:15px;font-size:16px;
+    font-weight:600;color:#fff;background:var(--brand);cursor:pointer;}
+  .btn:active{background:var(--brand-dark);}
+  .err{color:var(--warn);font-size:13px;margin-top:10px;display:none;}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>封号退款计算器</h1>
+    <p>颗粒AI · 王小旺　|　客服内部工具，快速核算退款金额</p>
+  </div>
+
+  <div class="card">
+    <label class="lab">账号版本</label>
+    <div class="opts" id="planOpts">
+      <label class="opt checked"><input type="radio" name="plan" value="50" checked>Max 20x（50 元/天）</label>
+      <label class="opt"><input type="radio" name="plan" value="30">Max 5x（30 元/天）</label>
+      <label class="opt"><input type="radio" name="plan" value="5.5">Pro（5.5 元/天）</label>
+      <label class="opt"><input type="radio" name="plan" value="custom">自定义单价</label>
+    </div>
+    <div class="field" id="customWrap" style="display:none;">
+      <input type="number" id="customPrice" inputmode="decimal" placeholder="自定义每天单价（元）">
+    </div>
+    <div class="perday" id="perdayTip">当前按天单价：<b>50</b> 元/天</div>
+
+    <div class="field">
+      <label class="lab">客户实付金额（元）</label>
+      <input type="number" id="paid" inputmode="decimal" placeholder="例如：1450">
+    </div>
+
+    <div class="field">
+      <label class="lab">订阅日期</label>
+      <input type="date" id="subDate">
+    </div>
+
+    <div class="field">
+      <label class="lab">封号日期</label>
+      <input type="date" id="banDate">
+    </div>
+    <div class="perday" id="daysTip"></div>
+
+    <label class="lab" style="margin-top:16px;">是否购买网络环境服务</label>
+    <div class="opts" id="netOpts">
+      <label class="opt checked"><input type="radio" name="net" value="yes" checked>已购买（不扣手续费）</label>
+      <label class="opt"><input type="radio" name="net" value="no">未购买（扣 20% 手续费）</label>
+    </div>
+
+    <div class="err" id="err"></div>
+  </div>
+
+  <button class="btn" onclick="calc()">计算退款</button>
+
+  <div class="results" id="results">
+    <div class="res nofee" id="cardNoFee">
+      <div class="rt">✓ 已购买网络环境服务（不扣 20% 手续费）</div>
+      <div><span class="big" id="r2">0</span> <span class="yuan">元</span></div>
+      <div class="detail" id="d2"></div>
+    </div>
+    <div class="res fee" id="cardFee">
+      <div class="rt">未购买网络环境服务（扣 20% 手续费）</div>
+      <div><span class="big" id="r1">0</span> <span class="yuan">元</span></div>
+      <div class="detail" id="d1"></div>
+    </div>
+  </div>
+
+  <p class="foot">颗粒AI · 王小旺　封号退款核算工具</p>
+</div>
+
+<script>
+const planOpts=document.getElementById('planOpts');
+const customWrap=document.getElementById('customWrap');
+const customPrice=document.getElementById('customPrice');
+const perdayTip=document.getElementById('perdayTip');
+
+function currentPerday(){
+  const v=document.querySelector('input[name="plan"]:checked').value;
+  if(v==='custom'){
+    const c=parseFloat(customPrice.value);
+    return isNaN(c)?null:c;
+  }
+  return parseFloat(v);
+}
+function refreshPerday(){
+  const v=document.querySelector('input[name="plan"]:checked').value;
+  customWrap.style.display = v==='custom' ? '' : 'none';
+  const p=currentPerday();
+  perdayTip.innerHTML = p===null ? '当前按天单价：<b>请填写自定义单价</b>' : `当前按天单价：<b>${p}</b> 元/天`;
+}
+planOpts.querySelectorAll('input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    planOpts.querySelectorAll('.opt').forEach(o=>o.classList.remove('checked'));
+    inp.closest('.opt').classList.add('checked');
+    refreshPerday();
+  });
+});
+customPrice.addEventListener('input',refreshPerday);
+
+const netOpts=document.getElementById('netOpts');
+netOpts.querySelectorAll('input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    netOpts.querySelectorAll('.opt').forEach(o=>o.classList.remove('checked'));
+    inp.closest('.opt').classList.add('checked');
+  });
+});
+
+function fmt(n){
+  // 保留两位，去掉多余的 .00
+  const r=Math.round(n*100)/100;
+  return r.toLocaleString('zh-CN',{minimumFractionDigits:0,maximumFractionDigits:2});
+}
+
+function calc(){
+  const err=document.getElementById('err');
+  err.style.display='none';
+  const perday=currentPerday();
+  const paid=parseFloat(document.getElementById('paid').value);
+  const subVal=document.getElementById('subDate').value;
+  const banVal=document.getElementById('banDate').value;
+
+  if(perday===null){err.textContent='请填写自定义每天单价';err.style.display='block';return;}
+  if(isNaN(paid)||paid<=0){err.textContent='请填写正确的客户实付金额';err.style.display='block';return;}
+  if(!subVal){err.textContent='请选择订阅日期';err.style.display='block';return;}
+  if(!banVal){err.textContent='请选择封号日期';err.style.display='block';return;}
+
+  const oneDay=24*60*60*1000;
+  const days=Math.round((new Date(banVal)-new Date(subVal))/oneDay);
+  if(days<0){err.textContent='封号日期不能早于订阅日期';err.style.display='block';return;}
+  document.getElementById('daysTip').textContent=`已使用：${days} 天（${subVal} → ${banVal}）`;
+
+  const fee=paid*0.2;            // 20% 手续费
+  const dayCost=perday*days;     // 按天费用
+
+  let refundFee = paid - fee - dayCost;     // 扣手续费
+  let refundNoFee = paid - dayCost;         // 不扣手续费
+  if(refundFee<0) refundFee=0;
+  if(refundNoFee<0) refundNoFee=0;
+
+  const md=s=>{const [y,m,d]=s.split('-');return `${+m}月${+d}日`;};
+  const stepDays=`① 已使用天数：${md(banVal)} − ${md(subVal)} ＝ <b>${days} 天</b>`;
+  const stepCost=`② 按天费用：${perday} 元/天 × ${days} 天 ＝ <b>${fmt(dayCost)} 元</b>`;
+
+  document.getElementById('r1').textContent=fmt(refundFee);
+  document.getElementById('r2').textContent=fmt(refundNoFee);
+  document.getElementById('d1').innerHTML=
+    `${stepDays}<br>${stepCost}<br>③ 手续费：${fmt(paid)} × 20% ＝ <b>${fmt(fee)} 元</b><br>`+
+    `④ 退款金额：${fmt(paid)} − ${fmt(fee)} − ${fmt(dayCost)} ＝ <b>${fmt(refundFee)} 元</b>`;
+  document.getElementById('d2').innerHTML=
+    `${stepDays}<br>${stepCost}<br>③ 退款金额：${fmt(paid)} − ${fmt(dayCost)} ＝ <b>${fmt(refundNoFee)} 元</b>`;
+
+  const net=document.querySelector('input[name="net"]:checked').value;
+  document.getElementById('cardNoFee').style.display = net==='yes' ? '' : 'none';
+  document.getElementById('cardFee').style.display = net==='no' ? '' : 'none';
+
+  document.getElementById('results').style.display='block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+refreshPerday();
+</script>
+</body>
+</html>
