@@ -3,537 +3,230 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>颗粒AI · Claude 技术支持需求调查</title>
+<title>Claude 账号服务协议 · 颗粒AI</title>
 <style>
   :root{
-    --brand:#C15F3C;        /* Claude 暖橙 */
-    --brand-dark:#A14A2B;
-    --bg:#F5F1EB;
-    --card:#ffffff;
-    --line:#E7DFD4;
-    --text:#2B2622;
-    --muted:#857C70;
+    --brand:#C15F3C; --brand-dark:#A14A2B;
+    --bg:#F5F1EB; --card:#ffffff; --line:#E7DFD4;
+    --text:#2B2622; --muted:#857C70;
+    --ok:#1E6B30; --okbg:#EAF6EC; --okline:#A6D3AE;
+    --warn:#C0392B; --warnbg:#FEF3F0; --warnline:#F2C4B6;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0; background:var(--bg); color:var(--text);
+  body{margin:0;background:var(--bg);color:var(--text);
     font-family:"PingFang SC","Microsoft YaHei",-apple-system,Segoe UI,sans-serif;
-    line-height:1.6; padding:24px 12px;
-  }
+    line-height:1.7;padding:24px 12px;-webkit-text-size-adjust:100%;}
   .wrap{max-width:680px;margin:0 auto;}
-  .head{
-    background:linear-gradient(135deg,var(--brand),var(--brand-dark));
-    color:#fff;border-radius:16px;padding:22px 24px;margin-bottom:18px;
-    box-shadow:0 8px 24px rgba(193,95,60,.25);
-  }
-  .head h1{margin:0;font-size:20px;letter-spacing:.5px;}
-  .head p{margin:6px 0 0;font-size:13px;opacity:.92;}
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:18px 20px;margin-bottom:14px;
-  }
-  .q{font-size:15px;font-weight:600;margin:0 0 12px;display:flex;align-items:center;gap:8px;}
-  .q .num{
-    background:var(--brand);color:#fff;width:22px;height:22px;border-radius:50%;
-    display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 auto;
-  }
-  .opts{display:flex;flex-wrap:wrap;gap:10px;}
-  .opt{
-    display:flex;align-items:center;gap:8px;border:1px solid var(--line);
-    border-radius:10px;padding:9px 13px;cursor:pointer;font-size:14px;
-    transition:.15s;background:#fff;user-select:none;flex:0 0 auto;
-  }
-  .opt:hover{border-color:var(--brand);}
-  .opt input{accent-color:var(--brand);width:16px;height:16px;cursor:pointer;}
-  .opt.checked{border-color:var(--brand);background:#FBF1EC;color:var(--brand-dark);font-weight:600;}
-  input[type=text],textarea{
-    width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
-    font-size:14px;font-family:inherit;color:var(--text);background:#fff;resize:vertical;
-  }
-  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--brand);}
-  .other-in{margin-top:10px;max-width:280px;}
-  .subq{margin-top:14px;padding:12px 14px;background:#FBF6F0;border:1px dashed var(--brand);border-radius:10px;}
-  .subq-q{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--brand-dark);}
-  .terms{font-size:13px;color:var(--muted);background:#FAF7F2;border-radius:10px;padding:12px 14px;margin-bottom:12px;border:1px solid var(--line);}
-  .terms ol{margin:0;padding-left:20px;}
-  .terms li{margin:4px 0;}
-  .warn{background:#FEF3F0;border:1px solid #F2C4B6;border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:#5a3a30;}
-  .warn .ban{color:#C0392B;font-weight:700;font-size:14px;display:block;margin-bottom:10px;}
-  .warn .sub{font-weight:700;color:var(--brand-dark);margin:12px 0 6px;font-size:13.5px;}
-  .warn .rule{margin:8px 0;}
-  .warn .rule b{color:#C0392B;}
-  .warn .eg{color:var(--muted);background:#fff;border-radius:8px;padding:7px 10px;margin:5px 0 0;font-size:12.5px;line-height:1.5;}
-  .benefit{background:#EAF6EC;border:1px solid #A6D3AE;border-radius:10px;padding:11px 14px;margin:12px 0;font-size:13px;color:#1E6B30;font-weight:600;line-height:1.6;}
-  .perk{margin-top:8px;padding-top:8px;border-top:1px dashed #A6D3AE;color:#B0431F;}
-  .agree{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer;}
-  .agree input{accent-color:var(--brand);width:18px;height:18px;cursor:pointer;}
-  .actions{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 8px;}
-  button{
-    flex:1;min-width:150px;border:none;border-radius:12px;padding:14px;font-size:15px;
-    font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;
-  }
-  .btn-main{background:var(--brand);color:#fff;box-shadow:0 6px 16px rgba(193,95,60,.3);}
-  .btn-main:hover{background:var(--brand-dark);}
-  .btn-sub{background:#fff;color:var(--brand-dark);border:1px solid var(--brand);}
-  .btn-sub:hover{background:#FBF1EC;}
-  #result{margin-top:18px;display:none;}
-  #resultText{width:100%;min-height:340px;border-radius:14px;border:1px solid var(--line);
-    box-shadow:0 8px 24px rgba(0,0,0,.08);padding:16px 18px;font-size:14px;line-height:1.7;
-    font-family:"PingFang SC","Microsoft YaHei",monospace;color:var(--text);background:#fff;resize:vertical;}
-  .tip{font-size:13px;color:var(--muted);text-align:center;margin-top:10px;}
-  .hidden{display:none;}
-  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;}
-  /* ---- 向导分步 ---- */
-  .step{display:none;}
-  .step.active{display:block;animation:fade .25s ease;}
-  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
-  .progress{margin:0 4px 14px;}
-  .progress-bar{height:7px;background:#E7DFD4;border-radius:5px;overflow:hidden;}
-  .progress-fill{height:100%;background:linear-gradient(90deg,var(--brand),var(--brand-dark));width:0;transition:width .3s;}
-  .progress-txt{font-size:12px;color:var(--muted);margin-top:6px;text-align:right;}
-  .nav{display:flex;gap:12px;margin:6px 4px 0;}
-
-  /* ---- 实时已选小结 ---- */
-  .live{margin:14px 4px 0;border:1px dashed var(--line);border-radius:12px;
-    background:#FBF7F1;padding:12px 14px;}
-  .live-title{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600;}
-  .live-row{font-size:13px;line-height:1.7;color:var(--text);}
-  .live-row b{color:var(--brand-dark);font-weight:600;}
-  .live-empty{font-size:13px;color:var(--muted);}
-
-  /* ---- 手机端适配 (iOS / 安卓) ---- */
-  @media (max-width:560px){
-    body{padding:14px 10px;-webkit-text-size-adjust:100%;}
-    .head{padding:18px 18px;border-radius:14px;}
-    .head h1{font-size:18px;}
-    .head p{font-size:12px;line-height:1.5;}
-    .card{padding:15px 15px;border-radius:12px;}
-    .opts{gap:8px;}
-    .opt{
-      flex:1 1 100%;            /* 每个选项占满一行，手指好点 */
-      padding:12px 14px;font-size:15px;
-    }
-    .opt input{width:18px;height:18px;}
-    /* 输入框字号≥16px，避免 iOS 自动放大页面 */
-    input[type=text],textarea{font-size:16px;}
-    .other-in{max-width:100%;}
-    .actions{flex-direction:column;gap:10px;}
-    button{width:100%;font-size:16px;padding:15px;}
-    .warn{padding:13px 13px;}
-    .warn .eg{font-size:12px;}
-  }
+  .head{background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+    color:#fff;border-radius:16px;padding:24px 26px;margin-bottom:18px;
+    box-shadow:0 8px 24px rgba(193,95,60,.25);}
+  .head h1{margin:0;font-size:23px;letter-spacing:.5px;}
+  .head p{margin:8px 0 0;font-size:14px;opacity:.92;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 22px;margin-bottom:16px;}
+  .sec-t{font-size:18px;font-weight:700;color:var(--brand-dark);margin:0 0 12px;
+    display:flex;align-items:center;gap:9px;}
+  .sec-t .n{background:var(--brand);color:#fff;width:26px;height:26px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;}
+  p.tx{margin:8px 0;font-size:15px;}
+  .tx u{text-underline-offset:3px;}
+  .lead{background:#FBF6F0;border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-size:15px;margin-bottom:14px;}
+  /* 红线 */
+  .ban{display:block;background:var(--warnbg);border:1px solid var(--warnline);
+    color:var(--warn);font-weight:700;font-size:16px;border-radius:12px;
+    padding:14px 16px;margin:6px 0 4px;line-height:1.6;}
+  /* 对比两栏 */
+  .compare{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px;}
+  .col{flex:1 1 280px;border-radius:12px;padding:16px 16px;}
+  .col.no{background:var(--okbg);border:1px solid var(--okline);}
+  .col.yes-fee{background:var(--warnbg);border:1px solid var(--warnline);}
+  .col h3{margin:0 0 6px;font-size:16px;}
+  .col.no h3{color:var(--ok);}
+  .col.yes-fee h3{color:var(--warn);}
+  .col .desc{font-size:13.5px;color:var(--muted);margin:0 0 10px;}
+  .col ul{margin:0;padding-left:18px;font-size:14px;}
+  .col li{margin:6px 0;}
+  .col .eg{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.5;}
+  .price{background:#FBF6F0;border:1px dashed var(--brand);border-radius:10px;
+    padding:10px 14px;font-size:14px;margin:10px 0;color:var(--brand-dark);font-weight:600;}
+  .hl{background:#FFF6E8;border:1px solid #F0D8A8;border-radius:10px;
+    padding:12px 14px;font-size:14.5px;margin:12px 0;color:#8A5A12;font-weight:600;line-height:1.6;}
+  .tip{background:var(--okbg);border:1px solid var(--okline);border-radius:10px;
+    padding:12px 14px;font-size:14px;color:var(--ok);margin:10px 0;line-height:1.6;}
+  /* 确认区 */
+  label.lab{display:block;font-size:15px;font-weight:600;margin:2px 0 8px;}
+  input[type=text]{width:100%;border:1px solid var(--line);border-radius:10px;
+    padding:13px 14px;font-size:17px;font-family:inherit;color:var(--text);background:#fff;}
+  input[type=text]:focus{outline:none;border-color:var(--brand);}
+  .agree{display:flex;align-items:flex-start;gap:10px;font-size:15px;font-weight:600;
+    cursor:pointer;margin-top:16px;line-height:1.5;}
+  .agree input{accent-color:var(--brand);width:20px;height:20px;cursor:pointer;flex:0 0 auto;margin-top:1px;}
+  .btn{width:100%;border:none;border-radius:12px;padding:16px;font-size:18px;font-weight:700;
+    color:#fff;background:var(--brand);cursor:pointer;margin-top:16px;font-family:inherit;
+    box-shadow:0 6px 16px rgba(193,95,60,.3);}
+  .btn:active{background:var(--brand-dark);}
+  .out{display:none;margin-top:16px;background:#FAF7F2;border:1px solid var(--line);
+    border-radius:12px;padding:16px;white-space:pre-wrap;font-size:14px;line-height:1.7;}
+  .copybtn{width:100%;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;
+    color:var(--brand);background:#fff;border:1.5px solid var(--brand);cursor:pointer;
+    margin-top:12px;font-family:inherit;}
+  .err{color:var(--warn);font-size:14px;margin-top:10px;display:none;font-weight:600;}
+  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:18px;}
+  b.red{color:var(--warn);}
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <div class="head">
-    <h1>Claude 需求确认单</h1>
-    <p>颗粒AI · 王小旺　|　逐题勾选，自动生成需求确认单，复制发给客服即可</p>
+    <h1>Claude 账号服务协议</h1>
+    <p>颗粒AI · 王小旺　|　请仔细阅读以下条款，确认无误后在底部签署同意</p>
   </div>
 
-  <div class="progress">
-    <div class="progress-bar"><div class="progress-fill" id="pfill"></div></div>
-    <div class="progress-txt" id="ptxt">第 1 / 9 步</div>
+  <div class="lead">
+    感谢您选择本店 Claude 账号服务。为保障您的账号安全、明确双方权责，请您在使用前认真阅读本协议全部内容。<b>下单或确认同意即视为已知悉并接受以下条款。</b>
   </div>
 
-  <!-- 称呼 -->
-  <div class="card step" data-branch="all">
-    <p class="q"><span class="num">N</span>您的淘宝昵称 / 称呼</p>
-    <input type="text" id="nickname" placeholder="例如：小王 / 旺旺号">
+  <!-- 1 网络环境服务 -->
+  <div class="card">
+    <div class="sec-t"><span class="n">1</span>网络环境配置技术支持服务（强烈建议购买）</div>
+    <p class="tx">Claude 对网络环境（IP）<u>非常敏感</u>。使用公共机场、大量人共用的 IP，极易因 IP 不纯净、人数过多、节点异常等被判定为异常，从而导致 <b class="red">账号被封</b>。</p>
+    <p class="tx">本店【网络环境配置技术支持服务】为您提供更纯净、独立、稳定的网络环境，是账号长期稳定使用的<u>关键保障</u>：</p>
+    <ul style="font-size:15px;margin:8px 0;padding-left:20px;">
+      <li><b>封号风险大幅降低</b>，账号更稳定、更长寿</li>
+      <li>IP 纯净独立，避免被他人违规连带牵连封号</li>
+      <li>由技术人员远程协助部署，省心省力</li>
+      <li>搭配会员另享<u>封号退款免 20% 手续费</u>等专属福利</li>
+    </ul>
+    <div class="hl">⚠ 重要：是否购买本服务，将直接影响下方的质保政策（见第 2 条）。<br>为了您的账号安全和退款权益，我们强烈建议您购买本服务。</div>
   </div>
 
-  <!-- 设备 -->
-  <div class="card step" data-branch="all">
-    <p class="q"><span class="num">N</span>使用设备（可多选）</p>
-    <div class="opts" data-group="device">
-      <label class="opt"><input type="checkbox" value="Windows">Windows</label>
-      <label class="opt"><input type="checkbox" value="Mac">Mac</label>
-      <label class="opt"><input type="checkbox" value="iPhone">iPhone</label>
-      <label class="opt"><input type="checkbox" value="安卓手机">安卓手机</label>
-      <label class="opt"><input type="checkbox" value="iPad/平板">iPad/平板</label>
-    </div>
-  </div>
+  <!-- 2 质保政策 -->
+  <div class="card">
+    <div class="sec-t"><span class="n">2</span>质保政策（购买 / 未购买 网络服务对比）</div>
 
-  <!-- 网络情况 -->
-  <div class="card step" data-branch="all">
-    <p class="q"><span class="num">N</span>当前网络情况（单选）</p>
-    <div class="opts" data-group="network">
-      <label class="opt"><input type="radio" name="network" value="专业网络环境">专业网络环境</label>
-      <label class="opt"><input type="radio" name="network" value="一般网络环境">一般机场 IP</label>
-      <label class="opt"><input type="radio" name="network" value="无网络环境">无网络环境</label>
-    </div>
-  </div>
+    <div class="price">按天计费单价：Claude Pro <b>5.5 元/天</b>　|　Max 5x <b>30 元/天</b>　|　Max 20x <b>50 元/天</b></div>
 
-  <!-- 网络环境技术支持服务介绍（非专业网络环境时显示） -->
-  <div class="card step" data-branch="all" id="netsvcStep">
-    <p class="q"><span class="num">N</span>网络环境安全技术支持服务（推荐开通）</p>
-    <div class="benefit" style="text-align:left;">
-      <b>专业一对一网络环境部署：</b><br>
-      · 服务费 <b>200 元</b>（一次性）<br>
-      · 流量费 <b>150 元 / 季度</b>
-      <div class="perk">
-        ★ 会员专属福利：<br>
-        · 开通 <b>Pro</b>：封号退款时<u>免收 20% 手续费</u>，仅收取按天计费费用<br>
-        · 开通 <b>Max 5x</b>：封号退款时<u>免收 20% 手续费</u>，仅收取按天计费费用<br>
-        · 开通 <b>Max 20x</b>：<u>免除 200 元服务费</u>，且封号退款时<u>免收 20% 手续费</u>，仅收取按天计费费用
+    <div class="compare">
+      <div class="col no">
+        <h3>✓ 已购买网络服务</h3>
+        <p class="desc">封号退款<u>免收 20% 手续费</u>，仅收取已使用天数的费用。</p>
+        <ul>
+          <li>Max 20x：仅收 50 元/天，另<u>免除 200 元服务费</u>
+            <span class="eg">例：实付 1450 元，用 10 天后封号，收 50×10=500，退 <b>950 元</b></span>
+          </li>
+          <li>Max 5x：仅收 30 元/天
+            <span class="eg">例：实付 820 元，用 10 天后封号，收 30×10=300，退 <b>520 元</b></span>
+          </li>
+          <li>Pro：仅收 5.5 元/天，余款原路退回</li>
+        </ul>
+      </div>
+
+      <div class="col yes-fee">
+        <h3>未购买网络服务</h3>
+        <p class="desc">封号退款<u>扣 20% 手续费</u>，并收取已使用天数的费用。</p>
+        <ul>
+          <li>Max 20x：实付×20% + 50 元/天
+            <span class="eg">例：实付 1450 元，用 10 天后封号，收 1450×20%+500=790，退 <b>660 元</b></span>
+          </li>
+          <li>Max 5x：实付×20% + 30 元/天
+            <span class="eg">例：实付 820 元，用 10 天后封号，收 820×20%+300=464，退 <b>356 元</b></span>
+          </li>
+          <li>Pro：实付×20% + 5.5 元/天，余款原路退回</li>
+        </ul>
       </div>
     </div>
-    <div class="opts" data-group="netsvc">
-      <label class="opt"><input type="radio" name="netsvc" value="需要">需要</label>
-      <label class="opt"><input type="radio" name="netsvc" value="暂不需要">暂不需要</label>
-      <label class="opt"><input type="radio" name="netsvc" value="想先了解一下">想先了解一下</label>
-    </div>
-    <!-- 选「想先了解一下」时展开 -->
-    <div id="netsvcInfo" class="subq hidden">
-      <p class="subq-q">网络环境安全技术支持服务说明</p>
-      <div style="font-size:13px;line-height:1.7;color:var(--text);">
-        <b>这是什么？</b><br>
-        由我们的技术人员为您一对一搭建稳定、纯净的专属网络环境，让您安全、顺畅地使用 Claude。<br><br>
-        <b>为什么需要？</b><br>
-        Claude 对网络环境非常敏感。使用公共机场 / 大量人共用的 IP，容易因 IP 不纯净、人数过多、节点异常等导致<u>账号被封</u>。纯净的网络环境能大幅降低封号风险，是账号长期稳定的关键。<br><br>
-        <b>服务内容：</b><br>
-        · <b>2 人共享 IP 环境</b>，人数极少、纯净度高，远优于几十上百人共用的公共机场<br>
-        · 技术人员远程协助部署，全程一对一指导<br>
-        · 节点稳定，速度快、延迟低，使用更顺畅<br>
-        · 后续使用中的网络问题持续提供技术支持<br><br>
-        <b>优点：</b><br>
-        · <b>封号风险大幅降低</b>，账号更稳定、更长寿<br>
-        · IP 纯净独立，避免被他人连带牵连封号<br>
-        · 省心省事，无需自己折腾节点、配置<br>
-        · 搭配会员还有封号退款<u>免 20% 手续费</u>等专属福利<br><br>
-        <b>费用：</b><br>
-        · 服务费 <b>200 元</b>（一次性）<br>
-        · 流量费 <b>150 元 / 季度</b><br><br>
-        <b>专属福利：</b>开通会员并购买本服务，封号退款时<u>免收 20% 手续费</u>，仅按天计费；开通 <b>Max 20x</b> 还可<u>免除 200 元服务费</u>。<br><br>
-        如仍有疑问，可在下方选择「需要」并留下联系方式，技术人员会一对一为您解答。
-      </div>
-    </div>
+
+    <div class="hl">⏱ 按天计费规则：封号当天<b class="red">不足 1 小时也按 1 天计算</b>，使用天数从订阅日计至封号日。</div>
+    <p class="tx" style="font-size:13.5px;color:var(--muted);">注：免费账号仅协助注册，不含会员质保。所有退款均按原支付方式退回。</p>
   </div>
 
-  <div class="card step" data-branch="all">
-    <p class="q"><span class="num">N</span>您想开通哪种会员？（单选）</p>
-    <div class="opts" data-group="plan">
-      <label class="opt"><input type="radio" name="plan" value="仅注册免费 Claude 账号">仅注册免费 Claude 账号</label>
-      <label class="opt"><input type="radio" name="plan" value="Claude Pro">Claude Pro</label>
-      <label class="opt"><input type="radio" name="plan" value="Claude Max 5x">Claude Max 5x</label>
-      <label class="opt"><input type="radio" name="plan" value="Claude Max 20x">Claude Max 20x</label>
-    </div>
+  <!-- 3 使用红线 -->
+  <div class="card">
+    <div class="sec-t"><span class="n">3</span>使用红线（违反不质保）</div>
+    <span class="ban">账号仅限个人使用 ⚠ 禁止反代、逆向、镜像、共享，违反者 100% 封号，且不予质保！！！</span>
   </div>
 
-  <!-- 联系方式（全部分支） -->
-  <div class="card step" data-branch="all" id="contactStep">
-    <p class="q"><span class="num">N</span>您的联系方式</p>
-    <input type="text" id="contact" placeholder="请留微信/手机等，方便技术人员第一时间联系您">
+  <!-- 4 账号安全 -->
+  <div class="card">
+    <div class="sec-t"><span class="n">4</span>账号安全提醒</div>
+    <p class="tx">如本店协助您注册账号，请您在拿到账号后<b>第一时间</b>完成以下安全设置，以保障账号归属与安全：</p>
+    <ul style="font-size:15px;margin:8px 0;padding-left:20px;">
+      <li>修改账号邮箱密码</li>
+      <li>绑定 / 换绑辅助邮箱、辅助手机号</li>
+      <li>开启 / 更换 2FA 双重验证</li>
+    </ul>
   </div>
 
-  <!-- 备注（全部分支） -->
-  <div class="card step" data-branch="all">
-    <p class="q"><span class="num">N</span>备注 / 特殊需求</p>
-    <textarea id="remark" rows="3" placeholder="选填，有特殊要求可在此说明"></textarea>
+  <!-- 5 签署 -->
+  <div class="card">
+    <div class="sec-t"><span class="n">5</span>确认与签署</div>
+    <label class="lab">您的称呼</label>
+    <input type="text" id="nick" placeholder="请填写您的称呼，如：张先生 / 小王">
+
+    <label class="agree"><input type="checkbox" id="agree">
+      本人已逐条阅读并完全理解、同意以上全部条款（含网络服务说明、质保政策、按天计费及使用红线）。</label>
+
+    <button class="btn" onclick="sign()">生成签署确认</button>
+    <div class="err" id="err"></div>
+
+    <div class="out" id="out"></div>
+    <button class="copybtn" id="copybtn" style="display:none;" onclick="copyOut()">一键复制，发送给客服</button>
   </div>
 
-  <!-- 质保政策（全部分支） -->
-  <div class="card step" data-branch="all">
-    <p class="q"><span class="num">N</span>质保政策</p>
-    <div class="warn">
-      <span class="ban">账号仅限个人使用⚠ 禁止反代，逆向，镜像，共享， 100% 封号，不质保！！！</span>
-      <div id="warrantyBody"></div>
-    </div>
-    <div class="benefit" id="warrantyNote"></div>
-    <label class="agree"><input type="checkbox" id="agree">我已阅读并同意以上质保政策</label>
-  </div>
-
-  <div class="live" id="live">
-    <div class="live-title">已选内容</div>
-    <div id="liveBox"><span class="live-empty">尚未选择</span></div>
-  </div>
-
-  <div class="nav">
-    <button class="btn-sub" id="prevBtn" onclick="prevStep()" style="display:none">上一步</button>
-    <button class="btn-main" id="nextBtn" onclick="nextStep()">下一步</button>
-    <button class="btn-main" id="genBtn" onclick="generate()" style="display:none">生成确认信息</button>
-  </div>
-
-  <div id="result">
-    <textarea id="resultText" readonly></textarea>
-    <div class="actions">
-      <button class="btn-main" onclick="copyText()">一键复制</button>
-    </div>
-    <p class="tip" id="copyTip">点「一键复制」后，回到淘宝聊天框长按 / Ctrl+V 粘贴发给客服即可</p>
-  </div>
-
-  <p class="foot">颗粒AI · 王小旺　提供 Claude 技术支持服务</p>
+  <p class="foot">颗粒AI · 王小旺　Claude 账号服务协议</p>
 </div>
 
 <script>
-// ---------- 向导分步 ----------
-const steps=[...document.querySelectorAll('.step')];
-let cur=0;
-
-// 当前应显示的步骤列表
-function activeSteps(){
-  const proNet = document.querySelector('input[name="network"]:checked')?.value==='专业网络环境';
-  const netsvc = document.querySelector('input[name="netsvc"]:checked')?.value;
-  return steps.filter(s=>{
-    // 已有专业网络环境，跳过网络服务介绍步
-    if(s.id==='netsvcStep' && proNet) return false;
-    // 选「暂不需要」网络服务，跳过联系方式步
-    if(s.id==='contactStep' && !proNet && netsvc==='暂不需要') return false;
-    return true;
-  });
+function pad(n){return n<10?'0'+n:''+n;}
+function nowText(){
+  const d=new Date();
+  return `${d.getFullYear()}年${pad(d.getMonth()+1)}月${pad(d.getDate())}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
+let signedText='';
+function sign(){
+  const err=document.getElementById('err');
+  err.style.display='none';
+  const nick=document.getElementById('nick').value.trim();
+  const agree=document.getElementById('agree').checked;
+  if(!nick){err.textContent='请先填写您的称呼';err.style.display='block';return;}
+  if(!agree){err.textContent='请勾选同意以上全部条款';err.style.display='block';return;}
 
-function showStep(i){
-  const act=activeSteps();
-  if(i>=act.length) i=act.length-1;
-  cur=i;
-  steps.forEach(s=>s.classList.remove('active'));
-  act[i].classList.add('active');
-  // 动态编号
-  act.forEach((s,idx)=>{const n=s.querySelector('.num');if(n)n.textContent=idx+1;});
-  document.getElementById('pfill').style.width=((i+1)/act.length*100)+'%';
-  document.getElementById('ptxt').textContent=`第 ${i+1} / ${act.length} 步`;
-  document.getElementById('prevBtn').style.display = i===0 ? 'none' : '';
-  const last = i===act.length-1;
-  document.getElementById('nextBtn').style.display = last ? 'none' : '';
-  document.getElementById('genBtn').style.display = last ? '' : 'none';
-  updateLive();
-  renderWarranty();
-  window.scrollTo({top:0,behavior:'smooth'});
+  signedText=
+`【Claude 账号服务协议 · 签署确认】
+
+签署人：${nick}
+签署时间：${nowText()}
+
+本人 ${nick} 已逐条阅读并完全理解、同意以下条款：
+1. 已知悉网络环境配置技术支持服务的重要性，明白是否购买将影响质保政策。
+2. 已知悉并接受质保政策：
+   · 已购买网络服务 → 封号退款免 20% 手续费，仅按天计费。
+   · 未购买网络服务 → 封号退款扣 20% 手续费，并按天计费。
+   · 按天计费：封号当天不足 1 小时也按 1 天计算，所有退款原路退回。
+3. 已知悉账号仅限个人使用，禁止反代、逆向、镜像、共享，违反者 100% 封号且不质保。
+4. 已知悉拿到账号后须第一时间修改邮箱密码、绑定辅助邮箱/手机号、开启 2FA。
+
+✓ ${nick} 已阅读并同意本协议全部条款。`;
+
+  const out=document.getElementById('out');
+  out.textContent=signedText;
+  out.style.display='block';
+  document.getElementById('copybtn').style.display='block';
+  out.scrollIntoView({behavior:'smooth'});
 }
-
-// 是否已购买网络环境服务（专业网络环境视为不需要购买，按普通质保）
-function hasNetService(){
-  const network=document.querySelector('input[name="network"]:checked')?.value;
-  const netsvc=document.querySelector('input[name="netsvc"]:checked')?.value;
-  return network!=='专业网络环境' && netsvc==='需要';
-}
-
-// 根据是否购买网络服务，动态渲染质保规则
-function renderWarranty(){
-  const body=document.getElementById('warrantyBody');
-  const note=document.getElementById('warrantyNote');
-  if(!body) return;
-  const vip=hasNetService();
-  if(vip){
-    body.innerHTML=`
-      <div class="sub">Claude Max 质保规则（已购网络环境服务）</div>
-      <div class="rule">（1）<b>Claude Max 20x</b> 封号：<u>不收 20% 手续费</u>，仅按天收费（50 元/天）
-        <div class="eg">举例：客户实付 1450 元，使用 10 天后封号，仅收 50×10 = 500 元，剩余 1450−500 = 950 元原路退回。</div>
-      </div>
-      <div class="rule">（2）<b>Claude Max 5x</b> 封号：<u>不收 20% 手续费</u>，仅按天收费（30 元/天）
-        <div class="eg">举例：客户实付 820 元，使用 10 天后封号，仅收 30×10 = 300 元，剩余 820−300 = 520 元原路退回。</div>
-      </div>
-      <div class="rule">（3）只掉订阅不收手续费，直接按 50 或 30 元/天收费（一般不会出现）。
-        <div class="eg">举例：使用 10 天后会员没了、账号正常，收取 50×10 = 500 元或 30×10 = 300 元，剩余原路退回。</div>
-      </div>
-      <div class="sub">Claude Pro 质保规则（已购网络环境服务）</div>
-      <div class="rule">封号：<u>不收 20% 手续费</u>，仅按天收费（<b>5.5 元/天</b>），剩余款项原支付方式退回。</div>`;
-    note.style.display='';
-    note.innerHTML=`★ 您已购买【网络环境安全技术支持服务】，封号退款时<u>免除 20% 手续费</u>，仅按天收费。`;
-  }else{
-    body.innerHTML=`
-      <div class="sub">Claude Max 质保规则</div>
-      <div class="rule">（1）<b>Claude Max 20x</b> 封号：扣 20% 手续费 + 按天收费（50 元/天）
-        <div class="eg">举例：客户实付 1450 元，使用 10 天后封号，收取手续费 1450×20% + 50×10 = 790 元，剩余 1450−790 = 660 元原路退回。</div>
-      </div>
-      <div class="rule">（2）<b>Claude Max 5x</b> 封号：扣 20% 手续费 + 按天收费（30 元/天）
-        <div class="eg">举例：客户实付 820 元，使用 10 天后封号，收取手续费 820×20% + 30×10 = 464 元，剩余 820−464 = 356 元原路退回。</div>
-      </div>
-      <div class="rule">（3）只掉订阅不收手续费，直接按 50 或 30 元/天收费（一般不会出现）。
-        <div class="eg">举例：使用 10 天后会员没了、账号正常，收取 50×10 = 500 元或 30×10 = 300 元，剩余原路退回。</div>
-      </div>
-      <div class="sub">Claude Pro 质保规则</div>
-      <div class="rule">封号：扣 20% 手续费 + 按天收费（<b>5.5 元/天</b>），剩余款项原支付方式退回。</div>`;
-    note.style.display='';
-    note.innerHTML=`★ 专享优惠：凡购买本店【网络环境安全技术支持服务】的客户，封号退款时<u>免除上述 20% 手续费</u>，仅按天收费。`;
-  }
-}
-
-// 每一步必答校验
-function validateStep(s){
-  const nick=s.querySelector('#nickname');
-  if(nick && !nick.value.trim()){alert('请填写您的称呼');return false;}
-  const radioGroups=new Set();
-  s.querySelectorAll('input[type=radio]').forEach(r=>radioGroups.add(r.name));
-  for(const name of radioGroups){
-    if(!s.querySelector(`input[name="${name}"]:checked`)){alert('请先选择一项再继续');return false;}
-  }
-  // 网络服务步：选「想先了解一下」后，必须再选「需要」或「暂不需要」才能继续
-  if(s.id==='netsvcStep'){
-    const netsvc=document.querySelector('input[name="netsvc"]:checked')?.value;
-    if(netsvc==='想先了解一下'){
-      alert('请阅读上方服务说明后，选择「需要」或「暂不需要」再继续');return false;
-    }
-  }
-  // 联系方式步：选了「需要部署」时必填
-  if(s.id==='contactStep'){
-    const netsvc=document.querySelector('input[name="netsvc"]:checked')?.value;
-    if(netsvc==='需要' && !document.getElementById('contact').value.trim()){
-      alert('您选择了需要部署，请留下联系方式，方便技术人员联系您');return false;
-    }
-  }
-  return true;
-}
-
-function nextStep(){
-  const act=activeSteps();
-  if(!validateStep(act[cur]))return;
-  if(cur<act.length-1) showStep(cur+1);
-}
-function prevStep(){ if(cur>0) showStep(cur-1); }
-
-showStep(0);
-
-// 选项点击高亮
-document.querySelectorAll('.opt input').forEach(inp=>{
-  inp.addEventListener('change',()=>{
-    const grp=inp.closest('.opts');
-    if(inp.type==='radio'){
-      grp.querySelectorAll('.opt').forEach(o=>o.classList.remove('checked'));
-      inp.closest('.opt').classList.add('checked');
-    }else{
-      inp.closest('.opt').classList.toggle('checked',inp.checked);
-    }
-    // 选「想先了解一下」时展开服务说明
-    if(inp.name==='netsvc'){
-      document.getElementById('netsvcInfo').classList.toggle('hidden', inp.value!=='想先了解一下');
-    }
-    updateLive();
-  });
-});
-
-// 文本输入实时更新已选小结
-['nickname','contact','remark'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) el.addEventListener('input',updateLive);
-});
-
-function getChecks(group){
-  const vals=[];
-  document.querySelectorAll(`[data-group="${group}"] input:checked`).forEach(i=>{
-    if(i.value!=='__other__') vals.push(i.value);
-  });
-  return vals;
-}
-function getRadio(name){
-  const el=document.querySelector(`input[name="${name}"]:checked`);
-  return el?el.value:'';
-}
-
-function gather(){
-  const nick=document.getElementById('nickname').value.trim();
-  const device=getChecks('device');
-  const network=getRadio('network');
-  const plan=getRadio('plan');
-  const netsvc=getRadio('netsvc');
-  const contact=document.getElementById('contact').value.trim();
-  const remark=document.getElementById('remark').value.trim();
-  return {nick,device,network,plan,netsvc,contact,remark};
-}
-
-// ---------- 实时已选小结 ----------
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-// 取选项的显示文字（所见即所选）
-function radioLabel(name){
-  const el=document.querySelector(`input[name="${name}"]:checked`);
-  return el? el.closest('.opt').textContent.trim() : '';
-}
-function checkLabels(group){
-  const arr=[];
-  document.querySelectorAll(`[data-group="${group}"] input:checked`).forEach(i=>{
-    if(i.value!=='__other__') arr.push(i.closest('.opt').textContent.trim());
-  });
-  return arr;
-}
-function updateLive(){
-  const box=document.getElementById('liveBox');
-  if(!box) return;
-  const items=[];
-  const nick=document.getElementById('nickname').value.trim();
-  if(nick) items.push(['称呼',nick]);
-  const dev=checkLabels('device'); if(dev.length) items.push(['使用设备',dev.join('、')]);
-  const network=radioLabel('network'); if(network) items.push(['网络情况',network]);
-  const plan=radioLabel('plan'); if(plan) items.push(['开通版本',plan]);
-  if(network==='专业网络环境'){
-    items.push(['网络服务','不需要']);
-  }else{
-    const netsvc=radioLabel('netsvc'); if(netsvc) items.push(['网络服务',netsvc]);
-  }
-  const contact=document.getElementById('contact').value.trim();
-  if(contact) items.push(['联系方式',contact]);
-  const remark=document.getElementById('remark').value.trim();
-  if(remark) items.push(['备注需求',remark]);
-  box.innerHTML = items.length
-    ? items.map(([k,v])=>`<div class="live-row"><b>${k}</b>：${escapeHtml(v)}</div>`).join('')
-    : '<span class="live-empty">尚未选择</span>';
-}
-
-// ---------- 生成文本摘要 ----------
-let lastText='';
-
-function planWarranty(plan, hasNetSvc){
-  if(plan==='仅注册免费 Claude 账号') return '免费账号，仅协助注册，无会员质保。';
-  const perday={'Claude Pro':'5.5','Claude Max 5x':'30','Claude Max 20x':'50'}[plan];
-  if(!perday) return '';
-  if(hasNetSvc) return `封号：免 20% 手续费（网络服务专享），仅按 ${perday} 元/天收费，余款原支付方式退回。`;
-  return `封号：扣 20% 手续费 + ${perday} 元/天，余款原支付方式退回。`;
-}
-function generate(){
-  if(!document.getElementById('agree').checked){
-    alert('请先勾选「我已阅读并同意以上质保政策」');return;
-  }
-  const d=gather();
-
-  const netsvcText = d.network==='专业网络环境' ? '不需要' : (d.netsvc||'（未选）');
-  const rows=[
-    ['称呼', d.nick||'（未填写）'],
-    ['使用设备', d.device.length?d.device.join('、'):'（未选）'],
-    ['网络情况', d.network||'（未选）'],
-    ['开通意向', d.plan||'（未选）'],
-    ['网络部署服务', netsvcText],
-    ['联系方式', d.contact||'（未填写）'],
-    ['备注需求', d.remark||'无'],
-  ];
-
-  const now=new Date();
-  const ts=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-
-  let txt='';
-  txt+='【Claude 技术支持 · 需求确认单】\n';
-  txt+='—— 颗粒AI · 王小旺 ——\n';
-  txt+='————————————————\n';
-  rows.forEach(([k,v])=>{ txt+=`${k}：${v}\n`; });
-  if(d.plan){
-    const hasNetSvc = hasNetService();
-    txt+='————————————————\n';
-    txt+=`【账号版本】${d.plan}\n`;
-    txt+=`【质保政策】${planWarranty(d.plan, hasNetSvc)}\n`;
-    txt+='【重要提醒】请第一时间修改邮箱密码、绑定/换绑辅助邮箱/手机号、开启/更换 2FA 双重验证，做好账号安全工作。\n';
-  }
-  txt+='————————————————\n';
-  txt+=`✓ ${d.nick||'客户'}已阅读并同意质保政策\n`;
-  txt+=`生成时间：${ts}\n`;
-  txt+='※ 请确认以上信息无误后，一键复制发送给客服，即可开始服务';
-
-  lastText=txt;
-  document.getElementById('resultText').value=txt;
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').scrollIntoView({behavior:'smooth'});
-}
-
-async function copyText(){
-  if(!lastText) return;
-  const tip=document.getElementById('copyTip');
-  const ta=document.getElementById('resultText');
-  try{
-    await navigator.clipboard.writeText(lastText);
-    tip.textContent='✓ 已复制，回到淘宝聊天框粘贴即可';
-  }catch(e){
-    // 兜底：选中文本框内容，手动复制
-    ta.focus(); ta.select();
-    try{ document.execCommand('copy'); tip.textContent='✓ 已复制，回到淘宝聊天框粘贴即可'; }
-    catch(_){ tip.textContent='请长按上方文本框 → 全选 → 复制'; }
+function copyOut(){
+  const btn=document.getElementById('copybtn');
+  const done=()=>{btn.textContent='✓ 已复制，请粘贴发送给客服';setTimeout(()=>btn.textContent='一键复制，发送给客服',2500);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(signedText).then(done).catch(()=>fallback());
+  }else{fallback();}
+  function fallback(){
+    const ta=document.createElement('textarea');ta.value=signedText;
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done();}catch(e){alert('复制失败，请手动长按选择文字复制');}
+    document.body.removeChild(ta);
   }
 }
 </script>
