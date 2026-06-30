@@ -56,6 +56,12 @@
     padding:12px 14px;font-size:14px;color:var(--ok);margin:10px 0;line-height:1.6;}
   /* 确认区 */
   label.lab{display:block;font-size:15px;font-weight:600;margin:2px 0 8px;}
+  .opts{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+  .opt{flex:1 1 calc(50% - 5px);border:1.5px solid var(--line);border-radius:10px;
+    padding:13px 12px;font-size:15px;cursor:pointer;text-align:center;
+    background:#fff;transition:.15s;user-select:none;}
+  .opt.checked{border-color:var(--brand);background:#FBF1EC;color:var(--brand-dark);font-weight:700;}
+  .opt input{display:none;}
   input[type=text]{width:100%;border:1px solid var(--line);border-radius:10px;
     padding:13px 14px;font-size:17px;font-family:inherit;color:var(--text);background:#fff;}
   input[type=text]:focus{outline:none;border-color:var(--brand);}
@@ -92,13 +98,16 @@
   <div class="card">
     <div class="sec-t"><span class="n">1</span>网络环境配置技术支持服务（强烈建议购买）</div>
     <p class="tx">Claude 对网络环境（IP）<u>非常敏感</u>。使用公共机场、大量人共用的 IP，极易因 IP 不纯净、人数过多、节点异常等被判定为异常，从而导致 <b class="red">账号被封</b>。</p>
+    <p class="tx"><b class="red">尤其是曾经被封过号的用户</b>，账号风险等级更高，若仍沿用原来的网络环境，新账号往往很快又会被再次封禁。此类用户更需要一套纯净、独立的网络环境，从根源上降低风险。</p>
     <p class="tx">本店【网络环境配置技术支持服务】为您提供更纯净、独立、稳定的网络环境，是账号长期稳定使用的<u>关键保障</u>：</p>
     <ul style="font-size:15px;margin:8px 0;padding-left:20px;">
       <li><b>封号风险大幅降低</b>，账号更稳定、更长寿</li>
       <li>IP 纯净独立，避免被他人违规连带牵连封号</li>
+      <li><b>对您电脑本地环境进行清理</b>，排除残留风险因素，让账号在干净的环境中登录使用</li>
       <li>由技术人员远程协助部署，省心省力</li>
       <li>搭配会员另享<u>封号退款免 20% 手续费</u>等专属福利</li>
     </ul>
+    <div class="price">费用说明：服务费 <b>200 元（一次性收取，仅收一次，并非每月收费）</b>；流量费 <b>150 元/季度</b>，不使用不续费即可。</div>
     <div class="hl">⚠ 重要：是否购买本服务，将直接影响下方的质保政策（见第 2 条）。<br>为了您的账号安全和退款权益，我们强烈建议您购买本服务。</div>
   </div>
 
@@ -162,6 +171,19 @@
   <!-- 5 签署 -->
   <div class="card">
     <div class="sec-t"><span class="n">5</span>确认与签署</div>
+
+    <label class="lab">您是否需要【网络环境配置技术支持服务】？</label>
+    <div class="opts" id="netOpts">
+      <label class="opt checked"><input type="radio" name="net" value="yes" checked>需要（推荐 · 享免手续费质保）</label>
+      <label class="opt"><input type="radio" name="net" value="no">不需要</label>
+    </div>
+
+    <div id="contactWrap">
+      <label class="lab">联系方式（需要网络服务，方便技术人员联系您部署）</label>
+      <input type="text" id="contact" placeholder="微信 / 手机号 / QQ 等，任填一种">
+      <div style="height:16px;"></div>
+    </div>
+
     <label class="lab">您的称呼</label>
     <input type="text" id="nick" placeholder="请填写您的称呼，如：张先生 / 小王">
 
@@ -184,29 +206,53 @@ function nowText(){
   const d=new Date();
   return `${d.getFullYear()}年${pad(d.getMonth()+1)}月${pad(d.getDate())}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
+const netOpts=document.getElementById('netOpts');
+netOpts.querySelectorAll('input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    netOpts.querySelectorAll('.opt').forEach(o=>o.classList.remove('checked'));
+    inp.closest('.opt').classList.add('checked');
+    document.getElementById('contactWrap').style.display = inp.value==='yes' ? '' : 'none';
+  });
+});
+
 let signedText='';
 function sign(){
   const err=document.getElementById('err');
   err.style.display='none';
   const nick=document.getElementById('nick').value.trim();
   const agree=document.getElementById('agree').checked;
+  const net=document.querySelector('input[name="net"]:checked').value;
+  const contact=document.getElementById('contact').value.trim();
+  if(net==='yes' && !contact){err.textContent='您选择了需要网络服务，请填写联系方式，方便技术人员联系您部署';err.style.display='block';return;}
   if(!nick){err.textContent='请先填写您的称呼';err.style.display='block';return;}
   if(!agree){err.textContent='请勾选同意以上全部条款';err.style.display='block';return;}
+
+  const netLine = net==='yes' ? '需要（已购买网络环境配置技术支持服务）' : '不需要';
+  const contactLine = net==='yes' ? `\n联系方式：${contact}` : '';
+  const warrantyBlock = net==='yes'
+? `2. 网络服务：本人需要并购买【网络环境配置技术支持服务】。
+   · 服务费 200 元（一次性，仅收一次，非每月）；流量费 150 元/季度，不使用不续费即可。
+3. 质保政策（已购网络服务）：
+   · 封号退款【免收 20% 手续费】，仅按天计费：Pro 5.5 元/天、Max 5x 30 元/天、Max 20x 50 元/天。
+   · Max 20x 另享免除 200 元服务费。
+   · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。`
+: `2. 网络服务：本人不需要【网络环境配置技术支持服务】，并知悉由此带来的封号风险及质保差异。
+3. 质保政策（未购网络服务）：
+   · 封号退款【扣 20% 手续费】，并按天计费：Pro 5.5 元/天、Max 5x 30 元/天、Max 20x 50 元/天。
+   · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。`;
 
   signedText=
 `【Claude 账号服务协议 · 签署确认】
 
 签署人：${nick}
 签署时间：${nowText()}
+网络环境配置技术支持服务：${netLine}${contactLine}
 
 本人 ${nick} 已逐条阅读并完全理解、同意以下条款：
-1. 已知悉网络环境配置技术支持服务的重要性，明白是否购买将影响质保政策。
-2. 已知悉并接受质保政策：
-   · 已购买网络服务 → 封号退款免 20% 手续费，仅按天计费。
-   · 未购买网络服务 → 封号退款扣 20% 手续费，并按天计费。
-   · 按天计费：封号当天不足 1 小时也按 1 天计算，所有退款原路退回。
-3. 已知悉账号仅限个人使用，禁止反代、逆向、镜像、共享，违反者 100% 封号且不质保。
-4. 已知悉拿到账号后须第一时间修改邮箱密码、绑定辅助邮箱/手机号、开启 2FA。
+1. 已知悉网络环境配置技术支持服务的重要性，明白是否购买将直接影响质保政策。
+${warrantyBlock}
+4. 已知悉账号仅限个人使用，禁止反代、逆向、镜像、共享，违反者 100% 封号且不质保。
+5. 已知悉拿到账号后须第一时间修改邮箱密码、绑定辅助邮箱/手机号、开启 2FA。
 
 ✓ ${nick} 已阅读并同意本协议全部条款。`;
 
