@@ -94,24 +94,21 @@
   </div>
 
   <div class="lead">
-    感谢您选择本店 Claude 账号服务。为保障您的账号安全、明确双方权责，请您在使用前认真阅读本协议全部内容。<b>下单或确认同意即视为已知悉并接受以下条款。</b>
+    请在使用前认真阅读本协议。<b>下单或确认同意，即视为已接受以下全部条款。</b>
   </div>
 
   <!-- 1 网络环境服务 -->
   <div class="card">
     <div class="sec-t"><span class="n">1</span>网络环境配置技术支持服务（强烈建议购买）</div>
-    <p class="tx">Claude 对网络环境（IP）<u>非常敏感</u>。使用公共机场、大量人共用的 IP，极易因 IP 不纯净、人数过多、节点异常等被判定为异常，从而导致 <b class="red">账号被封</b>。</p>
-    <p class="tx"><b class="red">尤其是曾经被封过号的用户</b>，账号风险等级更高，若仍沿用原来的网络环境，新账号往往很快又会被再次封禁。此类用户更需要一套纯净、独立的网络环境，从根源上降低风险。</p>
-    <p class="tx">本店【网络环境配置技术支持服务】为您提供更纯净、独立、稳定的网络环境，是账号长期稳定使用的<u>关键保障</u>：</p>
+    <p class="tx">Claude 对网络环境（IP）<u>非常敏感</u>。公共机场、多人共用的 IP 极易被判定异常导致 <b class="red">账号被封</b>；<b class="red">曾被封号的用户</b>风险更高，沿用旧环境往往很快再次被封。</p>
+    <p class="tx">本服务提供纯净、独立、稳定的网络环境，是账号长期稳定的关键：</p>
     <ul style="font-size:15px;margin:8px 0;padding-left:20px;">
-      <li><b>封号风险大幅降低</b>，账号更稳定、更长寿</li>
-      <li>IP 纯净独立，避免被他人违规连带牵连封号</li>
-      <li><b>对您电脑本地环境进行清理</b>，排除残留风险因素，让账号在干净的环境中登录使用</li>
-      <li>由技术人员远程协助部署，省心省力</li>
-      <li>搭配会员另享<u>封号退款仅收 10% 手续费</u>等专属福利</li>
+      <li>封号风险大幅降低，避免被他人连带封号</li>
+      <li>清理本地环境 + 技术人员远程协助部署，省心</li>
+      <li>搭配会员另享<u>封号退款仅收 10% 手续费</u></li>
     </ul>
-    <div class="price">费用说明：服务费 <b>200 元（一次性收取，仅收一次，并非每月收费）</b>；流量费 <b>150 元/季度</b>，不使用不续费即可。</div>
-    <div class="hl">⚠ 重要：是否购买本服务，将直接影响下方的质保政策（见第 2 条）。<br>为了您的账号安全和退款权益，我们强烈建议您购买本服务。</div>
+    <div class="price">费用：服务费 <b>200 元（一次性，非每月）</b>；流量费 <b>150 元/季度</b>，不用不续费即可。</div>
+    <div class="hl">⚠ 是否购买本服务将直接影响下方质保政策，为您的账号安全与退款权益，强烈建议购买。</div>
   </div>
 
   <!-- 2 质保政策 -->
@@ -151,7 +148,7 @@
     </div>
 
     <div class="hl">⏱ 按天计费规则：封号当天<b class="red">不足 1 小时也按 1 天计算</b>，使用天数从订阅日计至封号日。</div>
-    <p class="tx" style="font-size:13.5px;color:var(--muted);">注：免费账号仅协助注册，不含会员质保。所有退款均按原支付方式退回。</p>
+    <p class="tx" style="font-size:13.5px;color:var(--muted);">注：免费账号仅协助注册，不含会员质保。所有退款均按原支付方式退回。10% 低手续费仅适用于实际购买并在有效期内的网络服务客户，以订单记录核对为准，核对不到购买记录的按 20% 计。</p>
   </div>
 
   <!-- 3 使用红线 -->
@@ -177,12 +174,13 @@
 
     <label class="lab">您是否需要【网络环境配置技术支持服务】？</label>
     <div class="opts" id="netOpts">
-      <label class="opt checked"><input type="radio" name="net" value="yes" checked>需要（推荐 · 享 10% 低手续费质保）</label>
-      <label class="opt"><input type="radio" name="net" value="no">不需要</label>
+      <label class="opt checked"><input type="radio" name="net" value="yes" checked>需要（首次购买 · 享 10% 低手续费质保）</label>
+      <label class="opt"><input type="radio" name="net" value="renew">续购（已购买相关网络服务）</label>
+      <label class="opt"><input type="radio" name="net" value="no">不需要（正常收 20% 手续费）</label>
     </div>
 
     <div id="contactWrap">
-      <label class="lab">联系方式（需要网络服务，方便技术人员联系您部署）</label>
+      <label class="lab" id="contactLab">联系方式（方便技术人员联系您部署）</label>
       <input type="text" id="contact" placeholder="微信 / 手机号 / QQ 等，任填一种">
       <div style="height:16px;"></div>
     </div>
@@ -214,7 +212,16 @@ netOpts.querySelectorAll('input').forEach(inp=>{
   inp.addEventListener('change',()=>{
     netOpts.querySelectorAll('.opt').forEach(o=>o.classList.remove('checked'));
     inp.closest('.opt').classList.add('checked');
-    document.getElementById('contactWrap').style.display = inp.value==='yes' ? '' : 'none';
+    const wrap=document.getElementById('contactWrap');
+    const lab=document.getElementById('contactLab');
+    if(inp.value==='no'){
+      wrap.style.display='none';
+    }else{
+      wrap.style.display='';
+      lab.textContent = inp.value==='renew'
+        ? '请填写上次购买服务时的联系方式（方便我们核对订单）'
+        : '联系方式（方便技术人员联系您部署）';
+    }
   });
 });
 
@@ -227,22 +234,37 @@ function sign(){
   const net=document.querySelector('input[name="net"]:checked').value;
   const contact=document.getElementById('contact').value.trim();
   if(net==='yes' && !contact){err.textContent='您选择了需要网络服务，请填写联系方式，方便技术人员联系您部署';err.style.display='block';return;}
+  if(net==='renew' && !contact){err.textContent='您选择了续购，请填写上次购买服务时的联系方式，方便我们核对订单';err.style.display='block';return;}
   if(!nick){err.textContent='请先填写您的称呼';err.style.display='block';return;}
   if(!agree){err.textContent='请勾选同意以上全部条款';err.style.display='block';return;}
 
-  const netLine = net==='yes' ? '需要（已购买网络环境配置技术支持服务）' : '不需要';
-  const contactLine = net==='yes' ? `\n联系方式：${contact}` : '';
-  const warrantyBlock = net==='yes'
-? `2. 网络服务：本人需要并购买【网络环境配置技术支持服务】。
+  let netLine, contactLine, warrantyBlock;
+  if(net==='yes'){
+    netLine='需要（首次购买网络环境配置技术支持服务）';
+    contactLine=`\n联系方式：${contact}`;
+    warrantyBlock=`2. 网络服务：本人需要并购买【网络环境配置技术支持服务】。
    · 服务费 200 元（一次性，仅收一次，非每月）；流量费 150 元/季度，不使用不续费即可。
 3. 质保政策（已购网络服务）：
    · 封号退款【仅收 10% 手续费】，并按天计费：Pro 5.5 元/天、Max 5x 30 元/天、Max 20x 50 元/天。
    · Max 20x 另享免除 200 元服务费。
-   · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。`
-: `2. 网络服务：本人不需要【网络环境配置技术支持服务】，并知悉由此带来的封号风险及质保差异。
+   · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。`;
+  }else if(net==='renew'){
+    netLine='续购（已购买相关网络服务）';
+    contactLine=`\n上次购买服务时的联系方式：${contact}`;
+    warrantyBlock=`2. 网络服务：本人此前已购买【网络环境配置技术支持服务】，本次为续购，无需再付 200 元服务费；流量费 150 元/季度，不使用不续费即可。
+3. 质保政策（已购网络服务）：
+   · 封号退款【仅收 10% 手续费】，并按天计费：Pro 5.5 元/天、Max 5x 30 元/天、Max 20x 50 元/天。
+   · Max 20x 另享免除 200 元服务费。
+   · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。
+   · 说明：10% 低手续费仅适用于实际购买并在有效期内的网络服务客户，以卖家订单记录核对为准，核对不到购买记录的按 20% 计。`;
+  }else{
+    netLine='不需要';
+    contactLine='';
+    warrantyBlock=`2. 网络服务：本人不需要【网络环境配置技术支持服务】，并知悉由此带来的封号风险及质保差异。
 3. 质保政策（未购网络服务）：
    · 封号退款【收 20% 手续费】，并按天计费：Pro 5.5 元/天、Max 5x 30 元/天、Max 20x 50 元/天。
    · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。`;
+  }
 
   signedText=
 `【Claude 账号服务协议 · 签署确认】
