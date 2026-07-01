@@ -48,6 +48,9 @@
   .col ul{margin:0;padding-left:18px;font-size:14px;}
   .col li{margin:6px 0;}
   .col .eg{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.5;}
+  .fee{display:inline-block;padding:2px 9px;border-radius:6px;font-weight:800;font-size:15.5px;color:#fff;}
+  .fee.ok{background:var(--ok);}
+  .fee.bad{background:var(--warn);}
   .price{background:#FBF6F0;border:1px dashed var(--brand);border-radius:10px;
     padding:10px 14px;font-size:14px;margin:10px 0;color:var(--brand-dark);font-weight:600;}
   .hl{background:#FFF6E8;border:1px solid #F0D8A8;border-radius:10px;
@@ -120,7 +123,7 @@
     <div class="compare">
       <div class="col no">
         <h3>✓ 已购买网络服务</h3>
-        <p class="desc">封号退款<u>仅收 10% 手续费</u>，另收取已使用天数的费用。</p>
+        <p class="desc">封号退款<b class="fee ok">仅收 10% 手续费</b>，另收取已使用天数的费用。</p>
         <ul>
           <li>Max 20x：实付×10% + 50 元/天，另<u>免除 200 元服务费</u>
             <span class="eg">例：实付 1450 元，用 10 天后封号，收 1450×10%+500=645，退 <b>805 元</b></span>
@@ -134,7 +137,7 @@
 
       <div class="col yes-fee">
         <h3>未购买网络服务</h3>
-        <p class="desc">封号退款<u>扣 20% 手续费</u>，并收取已使用天数的费用。</p>
+        <p class="desc">封号退款<b class="fee bad">收 20% 手续费</b>，并收取已使用天数的费用。</p>
         <ul>
           <li>Max 20x：实付×20% + 50 元/天
             <span class="eg">例：实付 1450 元，用 10 天后封号，收 1450×20%+500=790，退 <b>660 元</b></span>
@@ -238,7 +241,7 @@ function sign(){
    · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。`
 : `2. 网络服务：本人不需要【网络环境配置技术支持服务】，并知悉由此带来的封号风险及质保差异。
 3. 质保政策（未购网络服务）：
-   · 封号退款【扣 20% 手续费】，并按天计费：Pro 5.5 元/天、Max 5x 30 元/天、Max 20x 50 元/天。
+   · 封号退款【收 20% 手续费】，并按天计费：Pro 5.5 元/天、Max 5x 30 元/天、Max 20x 50 元/天。
    · 按天计费：封号当天不足 1 小时也按 1 天计算，余款原路退回。`;
 
   signedText=
