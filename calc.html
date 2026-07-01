@@ -100,7 +100,7 @@
 
   <div class="results" id="results">
     <div class="res nofee" id="cardNoFee">
-      <div class="rt">✓ 已购买网络环境服务（不扣 20% 手续费）</div>
+      <div class="rt">✓ 已购买网络环境服务（仅收 10% 手续费）</div>
       <div><span class="big" id="r2">0</span> <span class="yuan">元</span></div>
       <div class="detail" id="d2"></div>
     </div>
@@ -175,11 +175,12 @@ function calc(){
   if(days<0){err.textContent='封号日期不能早于订阅日期';err.style.display='block';return;}
   document.getElementById('daysTip').textContent=`已使用：${days} 天（${subVal} → ${banVal}）`;
 
-  const fee=paid*0.2;            // 20% 手续费
+  const fee=paid*0.2;            // 未购：20% 手续费
+  const fee10=paid*0.1;          // 已购：10% 手续费
   const dayCost=perday*days;     // 按天费用
 
-  let refundFee = paid - fee - dayCost;     // 扣手续费
-  let refundNoFee = paid - dayCost;         // 不扣手续费
+  let refundFee = paid - fee - dayCost;      // 未购（扣 20%）
+  let refundNoFee = paid - fee10 - dayCost;  // 已购（收 10%）
   if(refundFee<0) refundFee=0;
   if(refundNoFee<0) refundNoFee=0;
 
@@ -193,7 +194,8 @@ function calc(){
     `${stepDays}<br>${stepCost}<br>③ 手续费：${fmt(paid)} × 20% ＝ <b>${fmt(fee)} 元</b><br>`+
     `④ 退款金额：${fmt(paid)} − ${fmt(fee)} − ${fmt(dayCost)} ＝ <b>${fmt(refundFee)} 元</b>`;
   document.getElementById('d2').innerHTML=
-    `${stepDays}<br>${stepCost}<br>③ 退款金额：${fmt(paid)} − ${fmt(dayCost)} ＝ <b>${fmt(refundNoFee)} 元</b>`;
+    `${stepDays}<br>${stepCost}<br>③ 手续费：${fmt(paid)} × 10% ＝ <b>${fmt(fee10)} 元</b><br>`+
+    `④ 退款金额：${fmt(paid)} − ${fmt(fee10)} − ${fmt(dayCost)} ＝ <b>${fmt(refundNoFee)} 元</b>`;
 
   const net=document.querySelector('input[name="net"]:checked').value;
   document.getElementById('cardNoFee').style.display = net==='yes' ? '' : 'none';
